@@ -1,8 +1,57 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Parent></Parent>
+      </div>
+    )
+  }
+}
+
+class Parent extends React.Component {
+  state = {
+    toggle: false
+  }
+  handleClick = () => {
+    this.setState((state) => {
+      return {
+        toggle: !state.toggle
+      }
+    })
+  }
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>
+          Button
+      </button>
+        <Child toggle={this.state.toggle} />
+      </div>
+    )
+  }
+}
+
+const Child = (props) => {
+  let flag;
+  if (props.toggle) {
+    flag = 'block';
+  }
+  else {
+    flag = 'none';
+  }
+  useEffect(() => {
+    console.log('didmount');
+    return ()=>{
+      console.log('unmount')
+    }
+  })
+  return (
+    <div style={{ width: 200, height: 200, backgroundColor: 'yellow', display: flag }}>qweqweqw</div>
+  )
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -11,7 +60,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
