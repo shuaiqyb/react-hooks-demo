@@ -1,62 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Parent></Parent>
-      </div>
-    )
-  }
-}
-
-class Parent extends React.Component {
-  state = {
-    toggle: false
-  }
-  handleClick = () => {
-    this.setState((state) => {
-      return {
-        toggle: !state.toggle
-      }
-    })
-  }
-  render() {
-    return (
-      <div>
-        <button onClick={this.handleClick}>
-          Button
-      </button>
-        <Child toggle={this.state.toggle} />
-      </div>
-    )
-  }
-}
-
-const Child = (props) => {
-  let flag;
-  if (props.toggle) {
-    flag = 'block';
-  }
-  else {
-    flag = 'none';
-  }
-  useEffect(() => {
-    console.log('didmount');
-    return ()=>{
-      console.log('unmount')
-    }
-  })
+const App = () => {
+  const [count , setCount] = useState(0);
+  const prevCountRef = useRef();
+  const prevCount = prevCountRef.current;
+  useEffect(()=>{
+    prevCountRef.current = count;
+  }) 
+  const onClick = useCallback(()=>{
+    setCount((count)=>count+1);
+  },[])
   return (
-    <div style={{ width: 200, height: 200, backgroundColor: 'yellow', display: flag }}>qweqweqw</div>
+    <div>
+      <button onClick={onClick}>{count}+{prevCount}</button>
+    </div>
   )
 }
 
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <App />,
   document.getElementById('root')
 );
 
